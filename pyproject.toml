@@ -18,7 +18,8 @@ dependencies = [
     'scipy',
     'matplotlib',
     'pandas',
-    'keras'
+    'tensorflow',
+    'scikit-learn',
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
