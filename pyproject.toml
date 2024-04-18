@@ -17,6 +17,8 @@ dependencies = [
     'numpy',
     'scipy',
     'matplotlib',
+    'pandas',
+    'keras'
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
