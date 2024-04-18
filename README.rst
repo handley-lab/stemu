@@ -3,7 +3,7 @@ stemu: s(t) emulation of smooth functions by stacking
 =====================================================
 :stemu: s(t) emulation of smooth functions by stacking 
 :Author: Harry Bevins & Will Handley
-:Version: 0.0.0
+:Version: 0.0.1
 :Homepage: https://github.com/handley-lab/stemu
 :Documentation: http://stemu.readthedocs.io/
 
