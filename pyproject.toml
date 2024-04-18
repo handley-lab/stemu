@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stemu"
+dynamic = ["version"]
+authors = [
+    { name="Harry Bevins", email="htjb2@cam.ac.uk" },
+    { name="Will Handley", email="williamjameshandley@gmail.com" },
+]
+description = "s(t) emulation of smooth functions by stacking"
+readme = "README.rst"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    'numpy',
+    'scipy',
+    'matplotlib',
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/handley-lab/stemu"
+"Bug Tracker" = "https://github.com/handley-lab/stemu/issues"
+"Documentation" = "https://stemu.readthedocs.io/en/latest/"
+
+[project.optional-dependencies]
+docs = ["sphinx", "sphinx_rtd_theme", "numpydoc"]
+test = ["pytest", "pytest-cov", "flake8", "pydocstyle", "packaging", "pre-commit"]
+
+[tool.setuptools.dynamic]
+version = {attr = "stemu._version.__version__"}
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ['E203', 'W503']
+
+[tool.isort]
+profile = 'black'
+skip_gitignore = true
