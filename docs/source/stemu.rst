@@ -13,7 +13,6 @@ stemu.emu module
 .. automodule:: stemu.emu
    :members:
    :undoc-members:
-   :show-inheritance:
 
 
 stemu.skutils module
@@ -22,7 +21,6 @@ stemu.skutils module
 .. automodule:: stemu.skutils
    :members:
    :undoc-members:
-   :show-inheritance:
 
 
 stemu.utils module
