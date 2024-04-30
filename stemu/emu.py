@@ -68,8 +68,8 @@ class Emu(object):
         self.t = t
 
         X = self.X_pipeline.fit_transform(X)
-        t = self.t_pipeline.fit_transform(t, y)
         y = self.y_pipeline.fit_transform(y)
+        t = self.t_pipeline.fit_transform(t, y)
 
         ty = self.ty_pipeline.fit_transform(np.block([[t], [y]]))
         t, y = ty[0], ty[1:]
@@ -112,6 +112,6 @@ class Emu(object):
         y = self.model.predict(X)
         _, _, y = unstack(X, y)
         ty = self.ty_pipeline.inverse_transform(np.block([[t], [y]]))
-        t, y = ty[0], ty[1:]
+        _, y = ty[0], ty[1:]
         y = self.y_pipeline.inverse_transform(y)
         return y
