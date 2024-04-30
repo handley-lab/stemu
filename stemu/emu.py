@@ -1,3 +1,5 @@
+"""Emulator base class."""
+
 import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
@@ -14,7 +16,7 @@ default_network = [
 
 
 class Emu(object):
-    """General Emulation base class
+    """General Emulation base class.
 
     This fits an emulator for y=f(t|X) in the style of sklearn models.
 
@@ -47,7 +49,7 @@ class Emu(object):
         self.ty_pipeline = Pipeline([("scaler", FunctionScaler())])
 
     def fit(self, X, t, y):
-        """Fit the emulator
+        """Fit the emulator.
 
         Parameters
         ----------
@@ -87,7 +89,7 @@ class Emu(object):
         return self
 
     def predict(self, X, t=None):
-        """Predict the target
+        """Predict the target.
 
         Parameters
         ----------
@@ -102,7 +104,6 @@ class Emu(object):
         y : array-like of shape (n_samples, n_target)
             The predicted target
         """
-
         if t is None:
             t = self.t
         t = self.t_pipeline.transform(t)

@@ -1,9 +1,11 @@
+"""Utility functions for stemu."""
+
 import numpy as np
 import pandas as pd
 
 
 def stack(X, t, y):
-    """Stack the data for training
+    """Stack the data for training.
 
     Parameters
     ----------
@@ -21,7 +23,6 @@ def stack(X, t, y):
     y : array-like of shape (n_samples*n_target,)
         The dependent variable for the target
     """
-
     data = pd.DataFrame(
         y, columns=t, index=pd.MultiIndex.from_arrays(np.atleast_2d(X).T)
     ).stack()
@@ -31,7 +32,7 @@ def stack(X, t, y):
 
 
 def unstack(X, y):
-    """Unstack the data for prediction
+    """Unstack the data for prediction.
 
     Parameters
     ----------
