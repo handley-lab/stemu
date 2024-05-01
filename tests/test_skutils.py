@@ -35,7 +35,7 @@ def test_IdentityTransformer():
 
     identity = IdentityTransformer()
     assert isinstance(identity.fit(y), IdentityTransformer)
-    t_ = identity.transform(t)
-    assert (t == t_).all()
-    t_ = identity.inverse_transform(t_)
-    assert (t == t_).all()
+    y_ = identity.transform(y)
+    assert (y == y_).all()
+    y_ = identity.inverse_transform(y_)
+    assert (y == y_).all()
