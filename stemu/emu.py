@@ -48,6 +48,8 @@ class Emu(object):
         self.y_pipeline = Pipeline([("default", IdentityTransformer())])
         self.ty_pipeline = Pipeline([("scaler", FunctionScaler())])
 
+        self.network = default_network
+
     def fit(self, X, t, y):
         """Fit the emulator.
 
@@ -78,7 +80,7 @@ class Emu(object):
 
         self.model = keras.models.Sequential(
             [keras.layers.Input(X.shape[-1:])]
-            + default_network
+            + self.network
             + [keras.layers.Dense(1, activation="linear")]
         )
 
