@@ -43,10 +43,10 @@ class Emu(object):
         self.optimizer = "adam"
         self.callbacks = [keras.callbacks.EarlyStopping(monitor="loss", patience=3)]
 
-        self.X_pipeline = Pipeline([("scaler", StandardScaler())])
-        self.t_pipeline = Pipeline([("cdf", CDFTransformer())])
-        self.y_pipeline = Pipeline([("default", IdentityTransformer())])
-        self.ty_pipeline = Pipeline([("scaler", FunctionScaler())])
+        self.X_pipeline = Pipeline([("scaler", StandardScaler())]) # standardization
+        self.t_pipeline = Pipeline([("cdf", CDFTransformer())]) # resampling transform
+        self.y_pipeline = Pipeline([("default", IdentityTransformer())]) # do nothing
+        self.ty_pipeline = Pipeline([("scaler", FunctionScaler())]) # standardize but along indie variable
 
         self.network = default_network
 
