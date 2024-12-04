@@ -3,10 +3,13 @@
 import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
-from tensorflow import keras
-
 from stemu.skutils import CDFTransformer, FunctionScaler, IdentityTransformer
 from stemu.utils import stack, unstack
+
+import os
+os.environ["KERAS_BACKEND"] = "jax"
+import keras
+
 
 class Emu(object):
     """General Emulation base class.
@@ -30,8 +33,9 @@ class Emu(object):
                   variables simultaneously
     """
 
-    def __init__(self, model, epochs=100, loss="mse", 
+    def __init__(self, epochs=100, loss="mse", 
                  optimizer="adam"):
+
         self.epochs = epochs
         self.loss = loss
         self.optimizer = optimizer
@@ -42,8 +46,12 @@ class Emu(object):
         self.y_pipeline = Pipeline([("default", IdentityTransformer())]) # do nothing
         self.ty_pipeline = Pipeline([("scaler", FunctionScaler())]) # standardize but along indie variable
 
-        self.model = model
-
+        self.network = [
+                keras.layers.Dense(30, activation="relu"),
+                keras.layers.Dense(30, activation="relu"),
+                keras.layers.Dense(30, activation="relu"),
+            ]
+        
     def fit(self, X, t, y):
         """Fit the emulator.
 
@@ -72,11 +80,16 @@ class Emu(object):
 
         X, y = stack(X, t, y)
 
+        self.model = keras.models.Sequential(
+                [keras.layers.Input(X.shape[-1:])]
+                + self.network
+                + [keras.layers.Dense(1, activation="linear")]
+            )
+
         self.model.compile(loss=self.loss, optimizer=self.optimizer)
         self.history = self.model.fit(
             X, y, epochs=self.epochs, batch_size=len(t), callbacks=self.callbacks
         )
-        return self
 
     def predict(self, X, t=None):
         """Predict the target. Generic function that should
