@@ -8,13 +8,6 @@ from tensorflow import keras
 from stemu.skutils import CDFTransformer, FunctionScaler, IdentityTransformer
 from stemu.utils import stack, unstack
 
-default_network = [
-    keras.layers.Dense(30, activation="relu"),
-    keras.layers.Dense(30, activation="relu"),
-    keras.layers.Dense(30, activation="relu"),
-]
-
-
 class Emu(object):
     """General Emulation base class.
 
@@ -37,10 +30,11 @@ class Emu(object):
                   variables simultaneously
     """
 
-    def __init__(self, *args, **kwargs):
-        self.epochs = 100
-        self.loss = "mse"
-        self.optimizer = "adam"
+    def __init__(self, model, epochs=100, loss="mse", 
+                 optimizer="adam"):
+        self.epochs = epochs
+        self.loss = loss
+        self.optimizer = optimizer
         self.callbacks = [keras.callbacks.EarlyStopping(monitor="loss", patience=3)]
 
         self.X_pipeline = Pipeline([("scaler", StandardScaler())]) # standardization
@@ -48,7 +42,7 @@ class Emu(object):
         self.y_pipeline = Pipeline([("default", IdentityTransformer())]) # do nothing
         self.ty_pipeline = Pipeline([("scaler", FunctionScaler())]) # standardize but along indie variable
 
-        self.network = default_network
+        self.model = model
 
     def fit(self, X, t, y):
         """Fit the emulator.
@@ -78,12 +72,6 @@ class Emu(object):
 
         X, y = stack(X, t, y)
 
-        self.model = keras.models.Sequential(
-            [keras.layers.Input(X.shape[-1:])]
-            + self.network
-            + [keras.layers.Dense(1, activation="linear")]
-        )
-
         self.model.compile(loss=self.loss, optimizer=self.optimizer)
         self.history = self.model.fit(
             X, y, epochs=self.epochs, batch_size=len(t), callbacks=self.callbacks
@@ -91,7 +79,8 @@ class Emu(object):
         return self
 
     def predict(self, X, t=None):
-        """Predict the target.
+        """Predict the target. Generic function that should
+        work with JAX, PyTorch, and TensorFlow models.
 
         Parameters
         ----------
@@ -111,7 +100,7 @@ class Emu(object):
         t = self.t_pipeline.transform(t)
         X = self.X_pipeline.transform(np.atleast_2d(X))
         X, _ = stack(X, np.atleast_1d(t), 1)
-        y = self.model.predict(X)
+        y = self.model(X)
         _, _, y = unstack(X, y)
         ty = self.ty_pipeline.inverse_transform(np.block([[t], [y]]))
         _, y = ty[0], ty[1:]
